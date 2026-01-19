@@ -47,6 +47,7 @@ The app uses custom React hooks for state management instead of Redux/Context:
 - **[src/hooks/useQuestions.js](src/hooks/useQuestions.js)** - Fetching and shuffling questions from Supabase
 - **[src/hooks/useAuth.js](src/hooks/useAuth.js)** - Password authentication with rate limiting and lockout
 - **[src/hooks/useUpload.js](src/hooks/useUpload.js)** - Form state and video upload logic
+- **[src/hooks/useAudio.js](src/hooks/useAudio.js)** - Background music playback with shuffle, volume control, and persistent preferences
 
 This pattern keeps state logic decoupled from UI components and makes it easy to reuse state management across different components.
 
@@ -56,8 +57,10 @@ All app customization is centralized in [src/config.js](src/config.js):
 - Couple information (names, wedding date)
 - UI text translations (currently Dutch)
 - Quiz behavior (shuffling, retakes)
+- Audio settings (playlist, autoplay, shuffle, volume)
 - Validation constraints (video size/duration limits)
 - Score messages based on percentage thresholds
+- Adventure theme elements (mascot, journey type, colors)
 
 **Important**: When adding new features that require user-facing text, validation rules, or configurable behavior, add them to this config file rather than hardcoding them.
 
@@ -66,6 +69,7 @@ All app customization is centralized in [src/config.js](src/config.js):
 1. **Quiz Flow**: [QuizPage.jsx](src/pages/QuizPage.jsx) → useQuestions (fetch) → useQuiz (game logic) → QuestionCard (display)
 2. **Upload Flow**: [UploadPage.jsx](src/pages/UploadPage.jsx) → useAuth (password check) → useUpload (form + video) → Supabase
 3. **Video Storage**: Files uploaded to Supabase storage → public URLs stored in database → VideoPlayer component renders
+4. **Audio Flow**: useAudio hook → Audio element → AudioPlayer UI controls → persistent state in localStorage
 
 ### Supabase Integration
 
@@ -114,12 +118,21 @@ Simple React Router setup in [src/App.jsx](src/App.jsx):
 3. **Question Shuffling**: Controlled by `config.quizSettings.shuffleQuestions` - uses Fisher-Yates algorithm in useQuestions hook.
 
 4. **Component Organization**:
-   - `components/common/` - Reusable UI components (Button, VideoPlayer, LoadingSpinner, Modal)
+   - `components/common/` - Reusable UI components (Button, VideoPlayer, LoadingSpinner, Modal, AudioPlayer)
    - `components/quiz/` - Quiz-specific components (QuestionCard, CoupleAnimation, AnswerButton, ResultsCard)
    - `components/upload/` - Upload page specific components
    - `components/welcome/` - Landing page components
 
-5. **Authentication State**: Uses `sessionStorage` for auth state (cleared on tab close) and `localStorage` for rate limiting (persists across tabs).
+5. **Audio System**: Background music with shuffle and autoplay capabilities:
+   - **[src/hooks/useAudio.js](src/hooks/useAudio.js)** manages playback state, playlist shuffling (Fisher-Yates algorithm), volume, and track progression
+   - **[src/components/common/AudioPlayer.jsx](src/components/common/AudioPlayer.jsx)** provides fixed-position controls (play/pause, next, shuffle toggle, volume slider)
+   - Audio state persists across pages and browser sessions via localStorage (volume, enabled state, shuffle preference)
+   - Supports `muteOnVideo` config to auto-mute when quiz videos play
+   - Playlist defined in `config.audioSettings.playlist` as array of `/audio/*.mp3` paths
+
+6. **Persistent State**:
+   - Authentication: `sessionStorage` for auth state (cleared on tab close), `localStorage` for rate limiting
+   - Audio: `localStorage` for volume, enabled state, and shuffle preference
 
 ## Deployment
 
@@ -132,3 +145,5 @@ Configured for Vercel deployment via [vercel.json](vercel.json):
 - UI text is currently in Dutch - modify [src/config.js](src/config.js) `texts` object for translations
 - Video upload max size/duration can be adjusted in `config.constraints`
 - The app expects couple photos at `/person1.jpg` and `/person2.jpg` for stick figure animation heads
+- Audio files should be placed in `public/audio/` directory and referenced in `config.audioSettings.playlist`
+- Browser autoplay policies may block automatic playback until user interaction - the app handles this gracefully by allowing manual play
