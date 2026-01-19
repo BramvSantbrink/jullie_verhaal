@@ -53,7 +53,7 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-adventure-navy/80 backdrop-blur-md animate-fadeIn"
       onClick={handleBackdropClick}
     >
       <div className="relative w-full max-w-4xl max-h-[90vh] animate-scaleIn">
@@ -61,7 +61,7 @@ export function Modal({
         {showCloseButton && onClose && (
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+            className="absolute top-2 right-2 z-10 bg-adventure-coral hover:bg-adventure-coral/80 text-white rounded-full p-2 transition-all duration-200 hover:scale-110 shadow-lg"
             aria-label="Close"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

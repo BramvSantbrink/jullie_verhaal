@@ -12,23 +12,23 @@ export function AnswerButton({
   const showAsCorrect = isAnswered && isThisCorrect;
   const showAsIncorrect = isAnswered && isSelected && !isThisCorrect;
 
-  let buttonClasses = 'w-full p-4 text-left rounded-lg border-2 transition-all duration-300 ';
+  let buttonClasses = 'w-full p-4 text-left rounded-xl border-2 transition-all duration-300 ';
 
   if (showAsCorrect) {
     // Correct answer
-    buttonClasses += 'bg-green-100 border-green-500 text-green-800';
+    buttonClasses += 'bg-adventure-success/20 border-adventure-success text-adventure-navy shadow-lg';
   } else if (showAsIncorrect) {
     // Selected wrong answer
-    buttonClasses += 'bg-red-100 border-red-500 text-red-800';
+    buttonClasses += 'bg-adventure-warning/20 border-adventure-warning text-adventure-chocolate shadow-lg';
   } else if (isSelected && !isAnswered) {
     // Selected but not submitted yet (shouldn't happen with immediate feedback)
-    buttonClasses += 'bg-wedding-gold/10 border-wedding-gold text-gray-800';
+    buttonClasses += 'bg-adventure-coral/10 border-adventure-coral text-text-primary';
   } else if (isAnswered) {
     // Other answers after revealing
-    buttonClasses += 'bg-gray-50 border-gray-200 text-gray-500';
+    buttonClasses += 'bg-gray-50 border-gray-200 text-text-secondary opacity-60';
   } else {
     // Default state
-    buttonClasses += 'bg-white border-gray-200 hover:border-wedding-gold hover:bg-wedding-gold/5 text-gray-800';
+    buttonClasses += 'bg-white border-gray-200 hover:border-adventure-coral hover:bg-adventure-coral/5 hover:scale-102 text-text-primary shadow-sm hover:shadow-md';
   }
 
   const letters = ['A', 'B', 'C', 'D'];
@@ -41,14 +41,14 @@ export function AnswerButton({
     >
       <div className="flex items-start gap-3">
         <span
-          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
             showAsCorrect
-              ? 'bg-green-500 text-white'
+              ? 'bg-adventure-success text-white scale-110'
               : showAsIncorrect
-              ? 'bg-red-500 text-white'
+              ? 'bg-adventure-warning text-white scale-110'
               : isAnswered
               ? 'bg-gray-200 text-gray-500'
-              : 'bg-wedding-gold/10 text-wedding-gold'
+              : 'bg-adventure-coral/10 text-adventure-coral'
           }`}
         >
           {showAsCorrect ? (
@@ -63,7 +63,7 @@ export function AnswerButton({
             letters[index - 1]
           )}
         </span>
-        <span className="pt-1">{text}</span>
+        <span className="pt-1 font-body">{text}</span>
       </div>
     </button>
   );

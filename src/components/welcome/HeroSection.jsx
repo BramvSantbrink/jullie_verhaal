@@ -1,11 +1,12 @@
 import { config } from '../../config';
+import { Dog, Sailboat, Mountain, ChefHat, Globe, Heart } from 'lucide-react';
 
 export function HeroSection() {
   return (
     <div className="text-center">
-      {/* Couple Photo */}
-      <div className="mb-8">
-        <div className="w-40 h-40 md:w-52 md:h-52 mx-auto rounded-full overflow-hidden border-4 border-white shadow-xl">
+      {/* Couple Photo with Adventure Icons */}
+      <div className="mb-8 relative">
+        <div className="w-40 h-40 md:w-52 md:h-52 mx-auto rounded-full overflow-hidden border-4 border-white shadow-2xl animate-gentleBounce">
           <img
             src={config.couplePhoto}
             alt={config.coupleName}
@@ -17,36 +18,43 @@ export function HeroSection() {
             }}
           />
           <div
-            className="w-full h-full bg-gradient-to-br from-wedding-gold to-wedding-sage hidden items-center justify-center"
+            className="w-full h-full bg-gradient-to-br from-adventure-coral to-adventure-teal hidden items-center justify-center"
           >
             <span className="text-white text-4xl md:text-5xl font-display font-semibold">
               {config.coupleName.split('&').map(name => name.trim()[0]).join('&')}
             </span>
           </div>
         </div>
+
+        {/* Floating Adventure Icons */}
+        <div className="absolute inset-0 pointer-events-none">
+          <Dog className="absolute top-0 left-0 w-8 h-8 text-adventure-coral animate-gentleBounce" style={{ animationDelay: '0s' }} />
+          <Sailboat className="absolute top-0 right-0 w-8 h-8 text-adventure-teal animate-boatSail" />
+          <Mountain className="absolute bottom-0 left-0 w-8 h-8 text-adventure-navy animate-gentleBounce" style={{ animationDelay: '0.3s' }} />
+          <ChefHat className="absolute bottom-0 right-0 w-8 h-8 text-adventure-chocolate animate-gentleBounce" style={{ animationDelay: '0.6s' }} />
+          <Globe className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -ml-24 w-8 h-8 text-adventure-gold animate-sparkle" />
+        </div>
       </div>
 
       {/* Couple Names */}
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-gray-800 mb-3">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-text-primary mb-3">
         {config.coupleName}
       </h1>
 
       {/* Wedding Date */}
-      <p className="text-lg md:text-xl text-wedding-gold font-medium mb-6">
+      <p className="text-lg md:text-xl text-adventure-coral font-semibold mb-6">
         {config.weddingDate}
       </p>
 
-      {/* Decorative line */}
+      {/* Decorative line with heart */}
       <div className="flex items-center justify-center gap-3 mb-6">
-        <div className="w-12 h-0.5 bg-wedding-gold/30" />
-        <svg className="w-6 h-6 text-wedding-gold" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-        </svg>
-        <div className="w-12 h-0.5 bg-wedding-gold/30" />
+        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-adventure-coral" />
+        <Heart className="w-6 h-6 text-adventure-coral fill-adventure-coral animate-pulse" />
+        <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-adventure-coral" />
       </div>
 
       {/* Welcome Message */}
-      <p className="text-xl md:text-2xl text-gray-600 font-light max-w-md mx-auto">
+      <p className="text-xl md:text-2xl text-text-primary font-body font-light max-w-md mx-auto">
         {config.welcomeMessage}
       </p>
     </div>

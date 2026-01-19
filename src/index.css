@@ -1,21 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-/* Wedding theme colors */
+/* Adventure theme colors */
 @theme {
-  --color-wedding-gold: #D4AF37;
-  --color-wedding-gold-light: #E8C547;
-  --color-wedding-gold-dark: #B8942D;
-  --color-wedding-sage: #9CAF88;
-  --color-wedding-sage-light: #B4C4A3;
-  --color-wedding-sage-dark: #7A8F6A;
-  --color-wedding-cream: #FFFDD0;
-  --color-wedding-cream-light: #FFFFF0;
-  --color-wedding-cream-dark: #F5F5C3;
-  --color-wedding-blush: #FFB6C1;
+  /* Primary Colors */
+  --color-adventure-coral: #FF6B9D;
+  --color-adventure-teal: #4ECDC4;
+  --color-adventure-yellow: #FFE66D;
 
-  --font-family-display: 'Playfair Display', serif;
+  /* Supporting Colors */
+  --color-adventure-navy: #2C3E50;
+  --color-adventure-gold: #F4A261;
+  --color-adventure-chocolate: #6B4423;
+  --color-adventure-snow: #FFFBF7;
+
+  /* Semantic Colors */
+  --color-adventure-success: #A8E6CF;
+  --color-adventure-info: #84B6F4;
+  --color-adventure-warning: #FDCB6E;
+  --color-adventure-bg: #FFF9F5;
+
+  /* Text Colors */
+  --color-text-primary: #2D3436;
+  --color-text-secondary: #636E72;
+
+  /* Legacy wedding colors (for gradual migration) */
+  --color-wedding-gold: #F4A261;
+  --color-wedding-gold-light: #F4A261;
+  --color-wedding-gold-dark: #F4A261;
+  --color-wedding-sage: #4ECDC4;
+  --color-wedding-sage-light: #4ECDC4;
+  --color-wedding-sage-dark: #4ECDC4;
+  --color-wedding-cream: #FFF9F5;
+  --color-wedding-cream-light: #FFF9F5;
+  --color-wedding-cream-dark: #FFF9F5;
+  --color-wedding-blush: #FF6B9D;
+
+  /* Fonts */
+  --font-family-display: 'Poppins', sans-serif;
   --font-family-body: 'Inter', sans-serif;
+  --font-family-accent: 'Caveat', cursive;
+
+  /* Animation Timing */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Animation Durations */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
 }
 
 /* Base styles */
@@ -30,8 +64,8 @@ h1, h2, h3, h4, h5, h6 {
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--color-wedding-cream-light);
-  color: #333;
+  background-color: var(--color-adventure-bg);
+  color: var(--color-text-primary);
 }
 
 /* Couple Animation Keyframes */
@@ -95,6 +129,45 @@ body {
   100% { opacity: 1; transform: scale(1); }
 }
 
+/* New Adventure Theme Animations */
+@keyframes gentleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes slideUpFade {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartFloat {
+  0% { opacity: 0; transform: translateY(0) scale(0.5); }
+  50% { opacity: 1; transform: translateY(-20px) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) scale(0.8); }
+}
+
+@keyframes dogWag {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+@keyframes boatSail {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  50% { transform: translateX(2px) rotate(2deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+@keyframes confettiPop {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 0; }
+}
+
 /* Animation utility classes */
 .animate-walk {
   animation: walk 0.4s ease-in-out infinite;
@@ -142,4 +215,51 @@ body {
 
 .animate-scaleIn {
   animation: scaleIn 0.3s ease-out forwards;
+}
+
+.animate-gentleBounce {
+  animation: gentleBounce 0.6s ease-in-out;
+}
+
+.animate-slideUpFade {
+  animation: slideUpFade var(--duration-base) var(--ease-smooth) forwards;
+}
+
+.animate-heartFloat {
+  animation: heartFloat 1.5s ease-out forwards;
+}
+
+.animate-dogWag {
+  animation: dogWag 0.6s ease-in-out infinite;
+}
+
+.animate-boatSail {
+  animation: boatSail 2s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 1s ease-in-out;
+}
+
+.animate-confettiPop {
+  animation: confettiPop 0.8s ease-out forwards;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-walk,
+  .animate-leg-left,
+  .animate-leg-right,
+  .animate-dogWag,
+  .animate-boatSail {
+    animation: none !important;
+  }
 }

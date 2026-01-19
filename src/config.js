@@ -20,6 +20,55 @@ export const config = {
     person2: "/person2.jpg"  // Rechter persoon
   },
 
+  // Adventure Theme Configuration
+  theme: {
+    colors: {
+      primary: 'adventure-coral',
+      secondary: 'adventure-teal',
+      accent: 'adventure-yellow'
+    },
+    fonts: {
+      heading: 'Poppins',
+      body: 'Inter',
+      accent: 'Caveat'
+    }
+  },
+
+  // Personalized Adventure Elements
+  adventureElements: {
+    mascot: 'dog',      // Berner Sennen
+    journey: 'sailing',  // Beneteau 50
+    sport: 'skiing',
+    passion: 'food',
+    destination: 'ethiopia'
+  },
+
+  // Audio Settings
+  audioSettings: {
+    enabled: true,
+    autoPlay: true,      // Auto-start on welcome and quiz pages (may require user interaction on some browsers)
+    shuffle: true,       // Shuffle playlist on start
+    muteOnVideo: true,   // Auto-mute when video plays
+    volume: 0.6,
+    playlist: [
+      '/audio/Bas & Q op Avontuur.mp3',
+      '/audio/Bas & Q op Avontuur (1).mp3',
+      '/audio/Bas & Q op Avontuur (2).mp3',
+      '/audio/Bas & Q, tot aan de horizon.mp3',
+      '/audio/Bas & Q, tot aan de horizon (1).mp3',
+      '/audio/Bas, Q en Loe.mp3',
+      '/audio/Bas, Q en Loe (1).mp3',
+      '/audio/Bas, Q en Loe (2).mp3',
+      '/audio/Bas, Q en Loe (3).mp3',
+      '/audio/Bas, Q en Loe (4).mp3',
+      '/audio/Bas, Q en Loe (5).mp3',
+      '/audio/Bas, Q en Loe (6).mp3',
+      '/audio/Bas, Q en Loe (7).mp3',
+      '/audio/Quirien & Bas, Wat Een Leven.mp3',
+      '/audio/Quirien & Bas, Wat Een Leven (1).mp3'
+    ]
+  },
+
   // Video positie opties
   videoPositions: {
     before: "Voor de vraag",
@@ -48,23 +97,52 @@ export const config = {
     passwordCooldownMinutes: 5
   },
 
+  // Adventure-themed Messages
+  messages: {
+    correct: [
+      "Perfect! Je bent zo scherp als verse bergsneeuw! ⛷️",
+      "Vlot varen! Je hebt het goed! ⛵",
+      "Zoet succes! Zoals Tony Chocolonely mousse! 🍫",
+      "Precies! Klaar voor het Ethiopische avontuur! 🌍"
+    ],
+    incorrect: [
+      "Niet helemaal! Maar elk avontuur heeft omwegen... 🗺️",
+      "Bijna! Zelfs de beste zeilers passen hun koers aan ⛵",
+      "Oeps! Maar zo leren we nieuwe recepten! 🍽️",
+      "Haast! Blijf het verhaal ontdekken 🎒"
+    ],
+    results: {
+      perfect: "Expert avonturier! Klaar voor Ethiopië! 🌍✈️",
+      high: "Geweldig verhaal! Je kent ze goed! 🎒🐕",
+      medium: "Goed begin! Blijf hun verhaal ontdekken ⛵",
+      low: "Elk avontuur begint ergens! 🗺️"
+    },
+    loading: [
+      "Je avontuur voorbereiden... 🗺️",
+      "De reis beginnen... ⛵",
+      "De berg beklimmen... ⛷️",
+      "Het menu doornemen... 🍽️",
+      "De koers uitzetten... 🧭"
+    ]
+  },
+
   // Score Berichten (gebaseerd op percentage)
   scoreMessages: {
     low: {
       threshold: 30,
-      message: "Blijf leren over ons! Er valt nog zoveel te ontdekken."
+      message: "Elk avontuur begint ergens! Blijf leren over ons verhaal."
     },
     medium: {
       threshold: 60,
-      message: "Niet slecht! Je kent ons best goed."
+      message: "Goed begin! Je kent ons verhaal al behoorlijk goed."
     },
     high: {
       threshold: 90,
-      message: "Indrukwekkend! Je kent ons echt heel goed!"
+      message: "Geweldig! Je kent ons verhaal echt heel goed!"
     },
     perfect: {
       threshold: 100,
-      message: "Perfecte score! Je bent een echte vriend(in) van de familie!"
+      message: "Expert avonturier! Klaar voor Ethiopië! Je bent een echte vriend(in)!"
     }
   },
 
@@ -72,7 +150,7 @@ export const config = {
   texts: {
     // Welcome page
     welcome: {
-      footer: "Met liefde gemaakt voor onze speciale dag",
+      footer: "2026 Bikini Productions",
       playQuiz: "Speel Quiz",
       submitQuestion: "Stel een Vraag"
     },
