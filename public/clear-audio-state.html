@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Audio State - Quizrine</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #ff5252;
+        }
+        .success {
+            background: #51cf66;
+        }
+        .success:hover {
+            background: #40c057;
+        }
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: #666;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 6px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Quizrine Audio Debug Tool</h1>
+
+        <div class="info">
+            <p><strong>Use this page to reset audio settings if the player isn't working correctly.</strong></p>
+            <p>This will clear all saved audio preferences and let the app start fresh with default settings.</p>
+        </div>
+
+        <div class="status" id="status">
+            <h3>Current Settings:</h3>
+            <p><strong>Audio Enabled:</strong> <span id="enabled">checking...</span></p>
+            <p><strong>Shuffle Enabled:</strong> <span id="shuffle">checking...</span></p>
+            <p><strong>Volume:</strong> <span id="volume">checking...</span></p>
+        </div>
+
+        <button onclick="clearAudioState()">Clear Audio Settings</button>
+        <button onclick="enableAudio()" class="success">Force Enable Audio</button>
+        <button onclick="enableShuffle()" class="success">Force Enable Shuffle</button>
+        <button onclick="checkStatus()">Refresh Status</button>
+
+        <div class="info" style="margin-top: 30px;">
+            <h3>What these buttons do:</h3>
+            <ul>
+                <li><strong>Clear Audio Settings:</strong> Removes all saved audio preferences</li>
+                <li><strong>Force Enable Audio:</strong> Turns on the audio system</li>
+                <li><strong>Force Enable Shuffle:</strong> Turns on shuffle mode</li>
+                <li><strong>Refresh Status:</strong> Shows current saved settings</li>
+            </ul>
+            <p><strong>After clicking any button, go back to your quiz app and refresh the page.</strong></p>
+        </div>
+
+        <div class="info">
+            <h3>Manual Console Commands:</h3>
+            <p>You can also open the browser console (F12) and run:</p>
+            <ul>
+                <li><code>localStorage.removeItem('quizrine_audio_enabled')</code></li>
+                <li><code>localStorage.removeItem('quizrine_audio_shuffle')</code></li>
+                <li><code>localStorage.removeItem('quizrine_audio_volume')</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function checkStatus() {
+            const enabled = localStorage.getItem('quizrine_audio_enabled');
+            const shuffle = localStorage.getItem('quizrine_audio_shuffle');
+            const volume = localStorage.getItem('quizrine_audio_volume');
+
+            document.getElementById('enabled').textContent = enabled || 'not set (will use default: true)';
+            document.getElementById('shuffle').textContent = shuffle || 'not set (will use config default)';
+            document.getElementById('volume').textContent = volume || 'not set (will use default: 0.6)';
+        }
+
+        function clearAudioState() {
+            localStorage.removeItem('quizrine_audio_enabled');
+            localStorage.removeItem('quizrine_audio_shuffle');
+            localStorage.removeItem('quizrine_audio_volume');
+            alert('✅ Audio settings cleared! Refresh your quiz app to see changes.');
+            checkStatus();
+        }
+
+        function enableAudio() {
+            localStorage.setItem('quizrine_audio_enabled', 'true');
+            alert('✅ Audio enabled! Refresh your quiz app to see changes.');
+            checkStatus();
+        }
+
+        function enableShuffle() {
+            localStorage.setItem('quizrine_audio_shuffle', 'true');
+            alert('✅ Shuffle enabled! Refresh your quiz app to see changes.');
+            checkStatus();
+        }
+
+        // Check status on load
+        checkStatus();
+    </script>
+</body>
+</html>

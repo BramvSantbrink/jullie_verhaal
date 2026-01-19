@@ -36,6 +36,8 @@ export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false)
     return saved ? parseFloat(saved) : 0.6;
   });
   const [isEnabled, setIsEnabledState] = useState(() => {
+    // If autoPlay is true, always start enabled (overrides saved preference on mount)
+    if (autoPlay) return true;
     const saved = localStorage.getItem('quizrine_audio_enabled');
     return saved !== null ? JSON.parse(saved) : true;
   });
