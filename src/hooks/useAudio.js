@@ -27,6 +27,8 @@ function shuffleArray(array) {
  */
 export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false) {
   const audioRef = useRef(null);
+  const autoplayAttemptedRef = useRef(false);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [volume, setVolumeState] = useState(() => {
@@ -43,44 +45,42 @@ export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false)
     const saved = localStorage.getItem('quizrine_audio_shuffle');
     return saved !== null ? JSON.parse(saved) : shuffleOnInit;
   });
-  const [shuffledPlaylist, setShuffledPlaylist] = useState([]);
-  const originalPlaylistRef = useRef(playlist);
+
+  // Initialize shuffled playlist immediately based on initial shuffle state
+  const [shuffledPlaylist, setShuffledPlaylist] = useState(() => {
+    const saved = localStorage.getItem('quizrine_audio_shuffle');
+    const shouldShuffle = saved !== null ? JSON.parse(saved) : shuffleOnInit;
+    return shouldShuffle && playlist.length > 0 ? shuffleArray(playlist) : [];
+  });
 
   // Get active playlist (shuffled or original)
   const activePlaylist = isShuffled && shuffledPlaylist.length > 0 ? shuffledPlaylist : playlist;
 
-  // Initialize shuffled playlist on mount if shuffle is enabled
-  useEffect(() => {
-    if (isShuffled && playlist.length > 0 && shuffledPlaylist.length === 0) {
-      setShuffledPlaylist(shuffleArray(playlist));
-    }
-  }, [isShuffled, playlist, shuffledPlaylist.length]);
-
-  // Initialize audio element
+  // Initialize audio element once we have an active playlist
   useEffect(() => {
     if (!audioRef.current && activePlaylist.length > 0) {
       audioRef.current = new Audio(activePlaylist[currentTrackIndex]);
       audioRef.current.volume = volume;
-      audioRef.current.loop = false; // We'll handle playlist cycling manually
+      audioRef.current.loop = false;
 
-      // Handle track end
-      audioRef.current.addEventListener('ended', () => {
-        // Auto-advance to next track
+      // Handle track end - auto-advance to next track
+      const handleEnded = () => {
         setCurrentTrackIndex((prev) => (prev + 1) % activePlaylist.length);
-      });
+      };
 
-      // Handle loading states
+      audioRef.current.addEventListener('ended', handleEnded);
       audioRef.current.addEventListener('loadstart', () => setIsLoading(true));
       audioRef.current.addEventListener('canplay', () => setIsLoading(false));
-    }
 
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []); // Only run once
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('ended', handleEnded);
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+      };
+    }
+  }, [activePlaylist.length, volume, currentTrackIndex]);
 
   // Update audio source when track changes
   useEffect(() => {
@@ -99,7 +99,8 @@ export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false)
 
   // Auto-play on mount if enabled
   useEffect(() => {
-    if (autoPlay && isEnabled && audioRef.current && !isPlaying) {
+    if (autoPlay && isEnabled && audioRef.current && !autoplayAttemptedRef.current) {
+      autoplayAttemptedRef.current = true;
       // Attempt autoplay (may be blocked by browser)
       audioRef.current.play().then(() => {
         setIsPlaying(true);
@@ -109,7 +110,7 @@ export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false)
         setIsPlaying(false);
       });
     }
-  }, [autoPlay]);
+  }, [autoPlay, isEnabled, activePlaylist.length]);
 
   // Play audio
   const play = useCallback(() => {
@@ -163,7 +164,8 @@ export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false)
       // Reset to first track of shuffled playlist
       setCurrentTrackIndex(0);
     } else {
-      // Disabling shuffle: reset to original playlist
+      // Disabling shuffle: clear shuffled playlist and reset to original
+      setShuffledPlaylist([]);
       setCurrentTrackIndex(0);
     }
   }, [isShuffled, playlist]);
@@ -212,13 +214,17 @@ export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false)
       const startVolume = audioRef.current.volume;
       const step = startVolume / (duration / 50);
       const interval = setInterval(() => {
-        if (audioRef.current.volume > step) {
+        if (audioRef.current && audioRef.current.volume > step) {
           audioRef.current.volume -= step;
         } else {
-          audioRef.current.volume = 0;
+          if (audioRef.current) {
+            audioRef.current.volume = 0;
+          }
           clearInterval(interval);
           pause();
-          audioRef.current.volume = startVolume;
+          if (audioRef.current) {
+            audioRef.current.volume = startVolume;
+          }
           resolve();
         }
       }, 50);
@@ -235,10 +241,12 @@ export function useAudio(playlist = [], autoPlay = false, shuffleOnInit = false)
       play();
       const step = targetVolume / (duration / 50);
       const interval = setInterval(() => {
-        if (audioRef.current.volume < targetVolume - step) {
+        if (audioRef.current && audioRef.current.volume < targetVolume - step) {
           audioRef.current.volume += step;
         } else {
-          audioRef.current.volume = targetVolume;
+          if (audioRef.current) {
+            audioRef.current.volume = targetVolume;
+          }
           clearInterval(interval);
           resolve();
         }
